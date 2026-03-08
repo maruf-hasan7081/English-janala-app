@@ -93,7 +93,7 @@ if(words.length==0){
                 <div class="font-semibold">${word.meaning ? word.meaning : "No Data Found"} / ${word.pronunciation ? word.pronunciation : "No Data Found"}</div>
                 <div class="flex justify-between items-center ">
                     <button onclick="loadWordDetails(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info"></i></button>
-                    <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
+                    <button onclick="pronounceWord('${word.word}')" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
 
                 </div>
             </div>
@@ -168,4 +168,35 @@ const displayWordDetails = (word) => {
 const createElements = (arr) => {
     const htmlelement = arr.map((el) => `<span class="btn">${el}</span>`)
     return htmlelement.join("")
+}
+
+
+document.getElementById("buttonclick").addEventListener("click", () => {
+
+    const input = document.getElementById("inputtext")
+    const value = input.value.trim().toLowerCase()
+    console.log(value)
+
+    fetch("https://openapi.programming-hero.com/api/words/all")
+        .then(res => res.json())
+        .then(data => {
+            const words = data.data
+            console.log(words)
+            const result = words.filter((word) => word.word .toLowerCase().includes(value));
+            console.log(result)
+            showLabelword(result)
+
+
+            
+
+            
+            
+        })
+    
+})
+
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US";
+  window.speechSynthesis.speak(utterance);
 }
